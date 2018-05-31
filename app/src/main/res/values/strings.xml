@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">BookTastic</string>
+
+    <!-- Menu Actions -->
+    <string name="insert">Add Standard Book</string>
+    <string name="insert_random">Add Random Book</string>
+    <string name="delete_all">Wipe Db Clean</string>
 </resources>

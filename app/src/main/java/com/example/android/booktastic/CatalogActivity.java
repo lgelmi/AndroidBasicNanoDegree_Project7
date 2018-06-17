@@ -16,12 +16,12 @@ import java.util.Random;
 /**
  * Shows debug data regarding the Book db.
  */
-public class MainActivity extends AppCompatActivity {
+public class CatalogActivity extends AppCompatActivity {
 
     /**
      * Constant for logging.
      */
-    public static final String TAG = MainActivity.class.getName();
+    public static final String TAG = CatalogActivity.class.getName();
 
     /**
      * Database helper instance to provide access to the database

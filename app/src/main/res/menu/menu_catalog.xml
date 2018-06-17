@@ -6,17 +6,12 @@
 
     <item
         android:id="@+id/action_insert"
-        android:title="@string/insert"
+        android:title="@string/action_insert"
+        android:icon="@drawable/addbook"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_insert_random"
-        android:title="@string/insert_random"
-        app:showAsAction="never" />
-
 
     <item
         android:id="@+id/action_delete_all"
-        android:title="@string/delete_all"
+        android:title="@string/action_delete_all"
         app:showAsAction="never" />
 </menu>

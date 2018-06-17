@@ -1,122 +1,95 @@
 package com.example.android.booktastic;
 
+import android.app.LoaderManager;
+import android.content.ContentUris;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.example.android.booktastic.data.BookContract.BookEntry;
-import com.example.android.booktastic.data.BookDbHelper;
-
-import java.util.Random;
 
 /**
  * Shows debug data regarding the Book db.
  */
-public class CatalogActivity extends AppCompatActivity {
+public class CatalogActivity extends AppCompatActivity implements LoaderManager
+        .LoaderCallbacks<Cursor> {
 
     /**
      * Constant for logging.
      */
     public static final String TAG = CatalogActivity.class.getName();
 
-    /**
-     * Database helper instance to provide access to the database
-     */
-    private BookDbHelper mDbHelper;
+    /** Identifier for the pet data loader */
+    private static final int BOOK_LOADER = 0;
 
+    /** Adapter for the ListView */
+    BookCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_catalog);
 
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        mDbHelper = new BookDbHelper(this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        updateConsole();
-    }
-
-    /**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the book database.
-     */
-    private void updateConsole() {
-        TextView displayView = findViewById(R.id.console);
-        try (Cursor cursor = mDbHelper.queryData()) {
-            // Figure out the index of each column
-            displayView.setText("The book table contains " + cursor.getCount() + " books.\n\n");
-
-            int idColumn = cursor.getColumnIndex(BookEntry._ID);
-            int nameColumn = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
-            int priceColumn = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
-            int quantityColumn = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
-
-            // Iterate through all the returned rows in the cursor
-            while (cursor.moveToNext()) {
-                // Use that index to extract the String or Int value of the word
-                // at the current row the cursor is on.
-                int id = cursor.getInt(idColumn);
-                String name = cursor.getString(nameColumn);
-                Float price = (float) cursor.getInt(priceColumn) / 100;
-                int quantity = cursor.getInt(quantityColumn);
-                // Display the values from each column of the current row in the cursor in the
-                // TextView
-                displayView.append(("\n" + id + " - " + name + " - " + price + " - " + quantity));
+        // Setup FAB to open EditorActivity
+        FloatingActionButton fab = findViewById(R.id.add_book_btn);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addBook();
             }
-        }
+        });
+
+        // Find the ListView which will be populated with the book data
+        ListView bookListView = findViewById(R.id.list);
+
+        // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
+        View emptyView = findViewById(R.id.empty_view);
+        bookListView.setEmptyView(emptyView);
+
+        // Setup an Adapter to create a list item for each row of book data in the Cursor.
+        // There is no book data yet (until the loader finishes) so pass in null for the Cursor.
+        mCursorAdapter = new BookCursorAdapter(this, null);
+        bookListView.setAdapter(mCursorAdapter);
+
+
+
+        // Kick off the loader
+        getLoaderManager().initLoader(BOOK_LOADER, null, this);
+
     }
 
     /**
-     * Helper method to insert hardcoded book data into the database. For debugging purposes only.
+     * Helper method to add a book through the editor activity.
      */
-    private void insertBook() {
-        long newRowId = mDbHelper.insertBook("1984", 1984, 1984, "Big Brother", "Unprobable phone");
-
-        // Show a toast message depending on whether or not the insertion was successful
-        if (newRowId == -1) {
-            // If the row ID is -1, then there was an error with insertion.
-            Toast.makeText(this, "Error with saving book", Toast.LENGTH_SHORT).show();
-        } else {
-            // Otherwise, the insertion was successful and we can display a toast with the row ID.
-            Toast.makeText(this, "Book saved with row id: " + newRowId, Toast.LENGTH_SHORT).show();
-        }
+    private void addBook() {
+        Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+        startActivity(intent);
     }
 
     /**
-     * Helper method to insert hardcoded book data into the database. For debugging purposes only.
+     * Helper method to delete all books in the database.
      */
-    private void insertRandomBook() {
-        Random random = new Random();
-        String[] books = {"S", "A song of Ice and Fire", "The Hobbit", "Percy Jackson", "One, " +
-                "Noone, One Hundred Thousands", "Dummy Book Name"};
-
-        long newRowId = mDbHelper.insertBook(books[random.nextInt(books.length)], random.nextInt
-                (5000), random.nextInt(50));
-
-        // Show a toast message depending on whether or not the insertion was successful
-        if (newRowId == -1) {
-            // If the row ID is -1, then there was an error with insertion.
-            Toast.makeText(this, "Error with saving book", Toast.LENGTH_SHORT).show();
-        } else {
-            // Otherwise, the insertion was successful and we can display a toast with the row ID.
-            Toast.makeText(this, "Book saved with row id: " + newRowId, Toast.LENGTH_SHORT).show();
-        }
+    private void deleteAllBooks() {
+        int rowsDeleted = getContentResolver().delete(BookEntry.CONTENT_URI, null, null);
+        Log.v("CatalogActivity", rowsDeleted + " rows deleted from book database");
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu options from the res/menu/main_menu.xml file.
+        // Inflate the menu options from the res/menu/menu_catalog.xmlxml file.
         // This adds menu items to the app bar.
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_catalog, menu);
         return true;
     }
 
@@ -125,20 +98,43 @@ public class CatalogActivity extends AppCompatActivity {
         // User clicked on a menu option in the app bar overflow menu
         switch (item.getItemId()) {
             case R.id.action_insert:
-                insertBook();
-                updateConsole();
-                return true;
-            case R.id.action_insert_random:
-                insertRandomBook();
-                updateConsole();
+                addBook();
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all:
-                int deleted = mDbHelper.wipeData();
-                Toast.makeText(this, "Books removed: " + deleted, Toast.LENGTH_SHORT).show();
-                updateConsole();
+                deleteAllBooks();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        // Define a projection that specifies the columns from the table we care about.
+        String[] projection = {
+                BookEntry._ID,
+                BookEntry.COLUMN_PRODUCT_NAME,
+                BookEntry.COLUMN_PRICE,
+                BookEntry.COLUMN_QUANTITY};
+
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,   // Parent activity context
+                BookEntry.CONTENT_URI,   // Provider content URI to query
+                projection,             // Columns to include in the resulting Cursor
+                null,                   // No selection clause
+                null,                   // No selection arguments
+                null);                  // Default sort order
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Update {@link PetCursorAdapter} with this new cursor containing updated pet data
+        mCursorAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // Callback called when the data needs to be deleted
+        mCursorAdapter.swapCursor(null);
     }
 }

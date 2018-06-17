@@ -1,2 +1,18 @@
 App Icon:
 https://www.flaticon.com/free-icon/bookshelf_164949
+Empty DB:
+https://www.flaticon.com/free-icon/shelves_436167
+Add Book:
+https://www.flaticon.com/free-icon/book_865516
+Sold: 
+https://www.flaticon.com/free-icon/money-bag_523226
+Order:
+https://www.flaticon.com/free-icon/phone-call_139008
+Save:
+https://www.flaticon.com/free-icon/diskette_124140#term=save&page=1&position=22
+Delete:
+https://www.flaticon.com/free-icon/garbage_148951#term=trash&page=1&position=8
+Plus:
+https://www.flaticon.com/free-icon/plus_225149
+Minus:
+https://www.flaticon.com/free-icon/substract_225148

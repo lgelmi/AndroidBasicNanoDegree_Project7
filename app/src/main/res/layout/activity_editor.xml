@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/std_margin"
+    tools:context=".EditorActivity">
+
+    <!-- Name -->
+    <TextView
+        android:id="@+id/category_name"
+        style="@style/CategoryStyle"
+        android:text="@string/category_name"
+        app:layout_constraintBottom_toTopOf="@+id/edit_book_name"
+        app:layout_constraintEnd_toStartOf="@id/edit_book_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edit_book_name"
+        style="@style/EditorFieldStyle"
+        android:layout_width="0dp"
+        android:hint="@string/category_name_hint"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/category_name"
+        app:layout_constraintTop_toBottomOf="@+id/category_name" />
+
+    <!-- Price -->
+    <TextView
+        android:id="@+id/category_price"
+        style="@style/CategoryStyle"
+        android:text="@string/category_price"
+        app:layout_constraintBottom_toTopOf="@+id/edit_book_price"
+        app:layout_constraintEnd_toStartOf="@id/edit_book_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_book_name" />
+
+    <EditText
+        android:id="@+id/edit_book_price"
+        style="@style/EditorFieldStyle"
+        android:layout_width="0dp"
+        android:layout_marginEnd="8dp"
+        android:hint="@string/category_price_hint"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toStartOf="@+id/label_price_units"
+        app:layout_constraintStart_toEndOf="@+id/category_name"
+        app:layout_constraintTop_toBottomOf="@+id/category_price" />
+
+    <!-- Units for weight (kg) -->
+    <TextView
+        android:id="@+id/label_price_units"
+        style="@style/EditorUnitsStyle"
+        android:text="@string/price_unit"
+        app:layout_constraintBaseline_toBaselineOf="@+id/edit_book_price"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Amount -->
+    <TextView
+        android:id="@+id/category_quantity"
+        style="@style/CategoryStyle"
+        android:text="@string/category_quantity"
+        app:layout_constraintEnd_toStartOf="@id/edit_book_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_book_price" />
+
+    <ImageButton
+        android:id="@+id/minus"
+        android:layout_width="@dimen/btn_size_small"
+        android:layout_height="@dimen/btn_size_small"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/minus"
+        android:scaleType="fitCenter"
+        android:src="@drawable/substract"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_book_quantity"
+        app:layout_constraintEnd_toStartOf="@+id/edit_book_quantity"
+        app:layout_constraintStart_toEndOf="@+id/category_quantity"
+        app:layout_constraintTop_toTopOf="@+id/edit_book_quantity" />
+
+    <EditText
+        android:id="@+id/edit_book_quantity"
+        style="@style/EditorFieldStyle"
+        android:layout_width="wrap_content"
+        android:hint="@string/category_quantity_hint"
+        android:inputType="number"
+        android:textAlignment="textEnd"
+        app:layout_constraintBottom_toBottomOf="@+id/plus"
+        app:layout_constraintEnd_toStartOf="@+id/plus"
+        app:layout_constraintStart_toEndOf="@+id/minus"
+        app:layout_constraintTop_toTopOf="@+id/plus" />
+
+    <ImageButton
+        android:id="@+id/plus"
+        android:layout_width="@dimen/btn_size_small"
+        android:layout_height="@dimen/btn_size_small"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/plus"
+        android:scaleType="fitCenter"
+        android:src="@drawable/plus"
+        app:layout_constraintStart_toEndOf="@+id/edit_book_quantity"
+        app:layout_constraintTop_toBottomOf="@id/category_quantity" />
+
+    <!-- Supplier -->
+
+    <TextView
+        android:id="@+id/category_supplier"
+        style="@style/CategoryStyle"
+        android:text="@string/category_supplier"
+        app:layout_constraintEnd_toStartOf="@id/edit_book_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_book_quantity" />
+
+    <EditText
+        android:id="@+id/edit_book_supplier"
+        style="@style/EditorFieldStyle"
+        android:layout_width="0dp"
+        android:hint="@string/category_supplier_hint"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/category_name"
+        app:layout_constraintTop_toBottomOf="@+id/category_supplier" />
+
+    <EditText
+        android:id="@+id/edit_book_phone"
+        style="@style/EditorFieldStyle"
+        android:layout_width="0dp"
+        android:hint="@string/category_supplier_phone_hint"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/category_name"
+        app:layout_constraintTop_toBottomOf="@+id/edit_book_supplier" />
+
+    <ImageButton
+        android:id="@+id/order"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/btn_size"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/order"
+        android:scaleType="fitCenter"
+        android:src="@drawable/order"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_book_phone"
+        app:layout_constraintEnd_toStartOf="@+id/edit_book_supplier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/category_supplier" />
+
+    <ImageButton
+        android:id="@+id/save"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/btn_size"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/order"
+        android:scaleType="fitCenter"
+        android:src="@drawable/diskette"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/delete"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/delete"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/btn_size"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/order"
+        android:scaleType="fitCenter"
+        android:src="@drawable/removebook"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/save" />
+
+</android.support.constraint.ConstraintLayout>

@@ -4,10 +4,6 @@
     <!-- Menu Actions -->
     <string name="action_insert">Add Book</string>
     <string name="action_delete_all">Wipe Library Clean</string>
-    <!-- Label for editor menu option to save book and leave editor [CHAR LIMIT=20] -->
-    <string name="action_save">Save</string>
-    <!-- Label for editor overflow menu option that deletes the current book [CHAR LIMIT=20] -->
-    <string name="action_delete">Delete</string>
 
     <!-- Empty View-->
     <!-- Title text for the empty view [CHAR LIMIT=50] -->
@@ -69,6 +65,11 @@
     <string name="price_format">%.2f €</string>
     <string name="separator">-</string>
     <string name="quantity_format">%d available</string>
+    <string name="missing_name">Can\'t save the book without a name!</string>
+    <string name="missing_quantity">Can\'t save the book without their amount!</string>
+    <string name="missing_price">Can\'t save the book without a price!</string>
+    <string name="missing_supplier">Can\'t save the book without a supplier!</string>
+    <string name="missing_phone">Can\'t save the book without a supplier name!</string>
 
 
 </resources>

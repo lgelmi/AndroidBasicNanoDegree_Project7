@@ -1,12 +1,10 @@
 package com.example.android.booktastic;
 
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.booktastic.data.BookContract.BookEntry;
@@ -34,7 +31,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager
     private static final int BOOK_LOADER = 0;
 
     /** Adapter for the ListView */
-    BookCursorAdapter mCursorAdapter;
+    private BookCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +58,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager
         // There is no book data yet (until the loader finishes) so pass in null for the Cursor.
         mCursorAdapter = new BookCursorAdapter(this, null);
         bookListView.setAdapter(mCursorAdapter);
-
-
 
         // Kick off the loader
         getLoaderManager().initLoader(BOOK_LOADER, null, this);

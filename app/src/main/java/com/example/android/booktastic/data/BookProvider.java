@@ -20,7 +20,7 @@ public class BookProvider extends ContentProvider {
     /**
      * Tag for the log messages
      */
-    public static final String LOG_TAG = BookProvider.class.getName();
+    private static final String LOG_TAG = BookProvider.class.getName();
 
     /**
      * URI matcher code for the content URI for the books table
@@ -270,7 +270,7 @@ public class BookProvider extends ContentProvider {
     /**
      * Validate a content for being a book.
      */
-    void ValidateBookContents(ContentValues values) {
+    private void ValidateBookContents(ContentValues values) {
         // Check that the name is not null
         String name = values.getAsString(BookEntry.COLUMN_PRODUCT_NAME);
         if (name == null) {

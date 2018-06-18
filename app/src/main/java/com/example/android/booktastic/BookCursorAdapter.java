@@ -3,18 +3,12 @@ package com.example.android.booktastic;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -27,7 +21,7 @@ import com.example.android.booktastic.data.BookContract.BookEntry;
  * that uses a {@link Cursor} of pet data as its data source. This adapter knows
  * how to create list items for each row of book data in the {@link Cursor}.
  */
-public class BookCursorAdapter extends CursorAdapter {
+class BookCursorAdapter extends CursorAdapter {
 
     public static final String TAG = BookCursorAdapter.class.getName();
 

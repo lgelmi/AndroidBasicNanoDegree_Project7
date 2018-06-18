@@ -32,7 +32,7 @@ import com.example.android.booktastic.data.BookContract.BookEntry;
 public class EditorActivity extends AppCompatActivity implements
         android.app.LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String TAG = EditorActivity.class.getName();
+    private static final String TAG = EditorActivity.class.getName();
 
 
     /**
@@ -81,7 +81,7 @@ public class EditorActivity extends AppCompatActivity implements
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
      * the view, and we change the mBookHasChanged boolean to true.
      */
-    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             mBookHasChanged = true;
@@ -119,9 +119,14 @@ public class EditorActivity extends AppCompatActivity implements
                 if (valueString.isEmpty())
                     mQuantityEditText.setText("0");
                 else {
-                    int value = Integer.parseInt(valueString.trim());
-                    if (value > 0)
-                        mQuantityEditText.setText(String.valueOf(value - 1));
+                    try {
+                        int value = Integer.parseInt(valueString.trim());
+                        if (value > 0)
+                            mQuantityEditText.setText(String.valueOf(value - 1));
+                    } catch (NumberFormatException error) {
+                        mQuantityEditText.setText(String.valueOf(Integer.MAX_VALUE));
+                    }
+
                 }
             }
         });
@@ -133,8 +138,12 @@ public class EditorActivity extends AppCompatActivity implements
                 if (valueString.isEmpty())
                     mQuantityEditText.setText("1");
                 else {
-                    int value = Integer.parseInt(valueString.trim());
-                    mQuantityEditText.setText(String.valueOf(value + 1));
+                    try {
+                        int value = Integer.parseInt(valueString.trim());
+                        mQuantityEditText.setText(String.valueOf(value + 1));
+                    } catch (NumberFormatException error) {
+                        mQuantityEditText.setText(String.valueOf(Integer.MAX_VALUE));
+                    }
                 }
             }
         });
@@ -192,7 +201,6 @@ public class EditorActivity extends AppCompatActivity implements
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         switch (requestCode) {
-
             case CALL_PERMISSION_REQUEST:
                 if ((grantResults.length > 0) && (grantResults[0] == PackageManager
                         .PERMISSION_GRANTED)) {
@@ -221,57 +229,43 @@ public class EditorActivity extends AppCompatActivity implements
         String supplier = mSupplierEditText.getText().toString().trim();
         String phone = mPhoneEditText.getText().toString().trim();
 
-        // Check if this is supposed to be a new book
-        // and check if all the fields in the editor are blank
-        if (mCurrentBookUri == null) {
-            if (TextUtils.isEmpty(name) && TextUtils.isEmpty(quantityString) && TextUtils.isEmpty
-                    (priceString) && TextUtils.isEmpty(supplier) && TextUtils.isEmpty(phone)) {
-                // Since no fields were modified, we can return early without creating a new book.
-                // No need to create ContentValues and no need to do any ContentProvider operations.
-                return;
-            }
-            if (TextUtils.isEmpty(name)) {
-                Toast.makeText(this, "Can't create the book without a name!", Toast.LENGTH_SHORT)
-                        .show();
-                return;
-            }
-            if (TextUtils.isEmpty(quantityString)) {
-                Toast.makeText(this, "Can't create the book without their amount!", Toast
-                        .LENGTH_SHORT).show();
-                return;
-            }
-            if (TextUtils.isEmpty(priceString)) {
-                Toast.makeText(this, "Can't create the book without a price!", Toast
-                        .LENGTH_SHORT).show();
-                return;
-            }
-            if (TextUtils.isEmpty(supplier)) {
-                Toast.makeText(this, "Can't create the book without a supplier!", Toast
-                        .LENGTH_SHORT).show();
-                return;
-            }
-            if (TextUtils.isEmpty(phone)) {
-                Toast.makeText(this, "Can't create the book without a supplier name!", Toast
-                        .LENGTH_SHORT).show();
-                return;
-            }
-
+        // Check if any field in the editor is blank
+        if (TextUtils.isEmpty(name)) {
+            Toast.makeText(this, R.string.missing_name, Toast.LENGTH_SHORT).show();
+            return;
         }
-
-
+        if (TextUtils.isEmpty(quantityString)) {
+            Toast.makeText(this, R.string.missing_quantity, Toast
+                    .LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(priceString)) {
+            Toast.makeText(this, R.string.missing_price, Toast
+                    .LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(supplier)) {
+            Toast.makeText(this, R.string.missing_supplier, Toast
+                    .LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(phone)) {
+            Toast.makeText(this, R.string.missing_phone, Toast
+                    .LENGTH_SHORT).show();
+            return;
+        }
         // Create a ContentValues object where column names are the keys,
         // and book attributes from the editor are the values.
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_PRODUCT_NAME, name);
-        if (!TextUtils.isEmpty(quantityString))
+        try {
             values.put(BookEntry.COLUMN_QUANTITY, Integer.parseInt(quantityString));
-        else
-            values.put(BookEntry.COLUMN_QUANTITY, 0);
-        if (!TextUtils.isEmpty(priceString))
-            values.put(BookEntry.COLUMN_PRICE, Math.round(Float.parseFloat(priceString) * 100));
-        else
-            values.put(BookEntry.COLUMN_PRICE, 0);
-
+        } catch (NumberFormatException error) {
+            Toast.makeText(this, "You have too many book for sure! Can't save it.", Toast
+                    .LENGTH_SHORT).show();
+            return;
+        }
+        values.put(BookEntry.COLUMN_PRICE, Math.round(Float.parseFloat(priceString) * 100));
         values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplier);
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE, phone);
 
